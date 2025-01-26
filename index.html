@@ -23,8 +23,9 @@
 
     .search-container {
       display: flex;
-      justify-content: center;
-      margin: 20px;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
       gap: 20px;
     }
 
@@ -39,12 +40,15 @@
     }
 
     #circle {
-      position: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 50px;
       height: 50px;
       border-radius: 50%;
       background: rgba(0, 212, 255, 0.5);
       pointer-events: none;
+      transform: translate(-50%, -50%);
       transition: transform 0.1s ease, opacity 0.3s ease;
     }
 
@@ -67,14 +71,17 @@
     const circle = document.getElementById('circle');
 
     document.addEventListener('mousemove', (e) => {
-      circle.style.transform = `translate(${e.pageX - 25}px, ${e.pageY - 25}px)`;
+      // マウスの位置に円を移動
+      circle.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
     });
 
     document.addEventListener('mousedown', () => {
+      // マウスクリック時のエフェクト
       circle.classList.add('small');
     });
 
     document.addEventListener('mouseup', () => {
+      // マウスを離したときに元に戻す
       circle.classList.remove('small');
     });
   </script>
