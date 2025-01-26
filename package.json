@@ -1,0 +1,12 @@
+{
+  "name": "電子世界",
+  "version": "1.0.0",
+  "description": "自分のために作ったブラウザです",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^26.1.0"
+  }
+}
