@@ -96,12 +96,35 @@
       animation: twinkle 2s infinite alternate;
     }
 
+    /* 流れ星のスタイル */
+    .shooting-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      box-shadow: 0 0 10px white, 0 0 20px white;
+      border-radius: 50%;
+      z-index: 0;
+      animation: shooting 1.5s ease-in-out;
+    }
+
     @keyframes twinkle {
       from {
         opacity: 0.5;
       }
       to {
         opacity: 1;
+      }
+    }
+
+    @keyframes shooting {
+      from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(500px, 500px) scale(0.5);
+        opacity: 0;
       }
     }
 
@@ -192,6 +215,25 @@
     }
 
     createStars();
+
+    // 流れ星を生成
+    function createShootingStar() {
+      const shootingStar = document.createElement('div');
+      shootingStar.className = 'shooting-star';
+      shootingStar.style.left = `${Math.random() * 100}%`;
+      shootingStar.style.top = `${Math.random() * 50}%`;
+      document.body.appendChild(shootingStar);
+
+      // アニメーション終了後に削除
+      shootingStar.addEventListener('animationend', () => {
+        shootingStar.remove();
+      });
+    }
+
+    // 流れ星をランダムな間隔で生成
+    setInterval(() => {
+      createShootingStar();
+    }, Math.random() * 5000 + 3000); // 3〜8秒間隔
 
     // 現地時間の表示
     function updateWorldTime() {
