@@ -11,6 +11,8 @@
       font-family: Arial, sans-serif;
       color: #fff;
       overflow: hidden;
+      background: url('https://source.unsplash.com/1600x900/?stars,night') no-repeat center center fixed;
+      background-size: cover;
     }
 
     h1 {
@@ -51,20 +53,6 @@
 
     .search-container button:hover {
       background-color: #008cba;
-    }
-
-    .background-selector {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .background-selector select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 25px;
-      border: none;
-      outline: none;
     }
 
     #stars {
@@ -109,25 +97,9 @@
     #world-time p {
       margin: 5px 0;
     }
-
-    /* 背景画像 */
-    .background.starry {
-      background: url('https://source.unsplash.com/1600x900/?stars,night') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    .background.forest {
-      background: url('https://source.unsplash.com/1600x900/?forest,night') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    .background.city {
-      background: url('https://source.unsplash.com/1600x900/?city,morning') no-repeat center center fixed;
-      background-size: cover;
-    }
   </style>
 </head>
-<body class="background starry">
+<body>
   <h1>電子世界</h1>
 
   <!-- 検索バー -->
@@ -142,16 +114,6 @@
     </div>
   </div>
 
-  <!-- 背景選択 -->
-  <div class="background-selector">
-    <label for="background-select">背景を選択: </label>
-    <select id="background-select" onchange="changeBackground()">
-      <option value="starry">星空</option>
-      <option value="forest">夜の森</option>
-      <option value="city">朝の都会</option>
-    </select>
-  </div>
-
   <div id="circle"></div>
   <div id="world-time">
     <p id="time-tokyo">東京: --:--</p>
@@ -160,12 +122,6 @@
   </div>
 
   <script>
-    // 背景切り替え
-    function changeBackground() {
-      const selectedBackground = document.getElementById("background-select").value;
-      document.body.className = `background ${selectedBackground}`;
-    }
-
     // マウス追従円
     const circle = document.getElementById('circle');
     document.addEventListener('mousemove', (e) => {
