@@ -67,7 +67,7 @@
       border-radius: 50%;
       background: rgba(0, 212, 255, 0.5);
       pointer-events: none;
-      transform: translate(-50%, -50%);
+      transform: translate(0, 0); /* 初期状態 */
       transition: transform 0.1s ease, opacity 0.3s ease;
     }
 
@@ -127,14 +127,18 @@
 
     // マウスの追従処理
     document.addEventListener('mousemove', (e) => {
-      circle.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      // マウスカーソルの位置を取得し、円の中心がカーソルに完全一致するよう調整
+      const circleSize = circle.offsetWidth / 2;
+      circle.style.transform = `translate(${e.clientX - circleSize}px, ${e.clientY - circleSize}px)`;
     });
 
     document.addEventListener('mousedown', () => {
+      // マウスクリック時のエフェクト
       circle.classList.add('small');
     });
 
     document.addEventListener('mouseup', () => {
+      // マウスを離したときに元に戻す
       circle.classList.remove('small');
     });
 
