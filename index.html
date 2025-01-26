@@ -9,10 +9,9 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
+      background: black;
       color: #fff;
       overflow: hidden;
-      background: url('https://source.unsplash.com/1600x900/?stars,night') no-repeat center center fixed;
-      background-size: cover;
     }
 
     h1 {
@@ -26,7 +25,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
+      margin-top: 50px;
       gap: 20px;
     }
 
@@ -55,13 +54,6 @@
       background-color: #008cba;
     }
 
-    #stars {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
     #circle {
       position: fixed;
       top: 0;
@@ -79,6 +71,53 @@
       width: 30px;
       height: 30px;
       background: rgba(0, 212, 255, 0.8);
+    }
+
+    #stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(15, 15, 48, 1) 0%, rgba(0, 0, 0, 1) 80%);
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    #stars .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from {
+        opacity: 0.5;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .shooting-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      box-shadow: 0 0 10px white, 0 0 20px white;
+      border-radius: 50%;
+      z-index: 0;
+      animation: shooting 1.5s ease-in-out;
+    }
+
+    @keyframes shooting {
+      from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(500px, 500px) scale(0.5);
+        opacity: 0;
+      }
     }
 
     #world-time {
@@ -100,9 +139,8 @@
   </style>
 </head>
 <body>
+  <div id="stars"></div>
   <h1>電子世界</h1>
-
-  <!-- 検索バー -->
   <div class="search-container">
     <div>
       <input id="search-bar-1" type="text" placeholder="検索バー 1">
@@ -113,7 +151,6 @@
       <button onclick="search('search-bar-2', 'yahoo')">Yahooで検索</button>
     </div>
   </div>
-
   <div id="circle"></div>
   <div id="world-time">
     <p id="time-tokyo">東京: --:--</p>
@@ -122,11 +159,12 @@
   </div>
 
   <script>
-    // マウス追従円
     const circle = document.getElementById('circle');
+    const starsContainer = document.getElementById('stars');
+
     document.addEventListener('mousemove', (e) => {
-      const size = circle.offsetWidth / 2;
-      circle.style.transform = `translate(${e.clientX - size}px, ${e.clientY - size}px)`;
+      const circleSize = circle.offsetWidth / 2;
+      circle.style.transform = `translate(${e.clientX - circleSize}px, ${e.clientY - circleSize}px)`;
     });
 
     document.addEventListener('mousedown', () => {
@@ -137,20 +175,54 @@
       circle.classList.remove('small');
     });
 
-    // 検索機能
     function search(barId, engine) {
       const query = document.getElementById(barId).value;
       if (query) {
-        let url = engine === 'google'
-          ? `https://www.google.com/search?q=${encodeURIComponent(query)}`
-          : `https://search.yahoo.co.jp/search?p=${encodeURIComponent(query)}`;
+        let url = '';
+        if (engine === 'google') {
+          url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        } else if (engine === 'yahoo') {
+          url = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(query)}`;
+        }
         window.open(url, '_blank');
       } else {
         alert('検索ワードを入力してください！');
       }
     }
 
-    // 世界時間表示
+    function createStars() {
+      const starCount = 200;
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        starsContainer.appendChild(star);
+      }
+    }
+
+    createStars();
+
+    function createShootingStar() {
+      const shootingStar = document.createElement('div');
+      shootingStar.className = 'shooting-star';
+      shootingStar.style.left = `${Math.random() * 100}%`;
+      shootingStar.style.top = `${Math.random() * 50}%`;
+      document.body.appendChild(shootingStar);
+
+      shootingStar.addEventListener('animationend', () => {
+        shootingStar.remove();
+      });
+    }
+
+    setInterval(() => {
+      createShootingStar();
+    }, Math.random() * 3000 + 1000);
+
     function updateWorldTime() {
       const now = new Date();
       const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
