@@ -130,11 +130,11 @@
   <div class="search-container">
     <div>
       <input id="search-bar-1" type="text" placeholder="検索バー 1">
-      <button onclick="search('search-bar-1')">検索</button>
+      <button onclick="search('search-bar-1', 'google')">Googleで検索</button>
     </div>
     <div>
       <input id="search-bar-2" type="text" placeholder="検索バー 2">
-      <button onclick="search('search-bar-2')">検索</button>
+      <button onclick="search('search-bar-2', 'yahoo')">Yahooで検索</button>
     </div>
   </div>
   <div id="circle"></div>
@@ -163,10 +163,16 @@
     });
 
     // 検索機能
-    function search(barId) {
+    function search(barId, engine) {
       const query = document.getElementById(barId).value;
       if (query) {
-        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+        let url = '';
+        if (engine === 'google') {
+          url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        } else if (engine === 'yahoo') {
+          url = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(query)}`;
+        }
+        window.open(url, '_blank');
       } else {
         alert('検索ワードを入力してください！');
       }
