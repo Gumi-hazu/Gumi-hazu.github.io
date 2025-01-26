@@ -104,6 +104,24 @@
         opacity: 1;
       }
     }
+
+    /* 現地時間の表示 */
+    #world-time {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #00d4ff;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      text-align: left;
+    }
+
+    #world-time p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -120,6 +138,11 @@
     </div>
   </div>
   <div id="circle"></div>
+  <div id="world-time">
+    <p id="time-tokyo">東京: --:--</p>
+    <p id="time-ny">ニューヨーク: --:--</p>
+    <p id="time-sydney">シドニー: --:--</p>
+  </div>
 
   <script>
     const circle = document.getElementById('circle');
@@ -127,18 +150,15 @@
 
     // マウスの追従処理
     document.addEventListener('mousemove', (e) => {
-      // マウスカーソルの位置を取得し、円の中心がカーソルに完全一致するよう調整
       const circleSize = circle.offsetWidth / 2;
       circle.style.transform = `translate(${e.clientX - circleSize}px, ${e.clientY - circleSize}px)`;
     });
 
     document.addEventListener('mousedown', () => {
-      // マウスクリック時のエフェクト
       circle.classList.add('small');
     });
 
     document.addEventListener('mouseup', () => {
-      // マウスを離したときに元に戻す
       circle.classList.remove('small');
     });
 
@@ -166,6 +186,26 @@
     }
 
     createStars();
+
+    // 現地時間の表示
+    function updateWorldTime() {
+      const now = new Date();
+
+      // 東京 (UTC+9)
+      const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+      document.getElementById("time-tokyo").textContent = `東京: ${tokyoTime.getHours()}:${String(tokyoTime.getMinutes()).padStart(2, "0")}`;
+
+      // ニューヨーク (UTC-5)
+      const nyTime = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+      document.getElementById("time-ny").textContent = `ニューヨーク: ${nyTime.getHours()}:${String(nyTime.getMinutes()).padStart(2, "0")}`;
+
+      // シドニー (UTC+11)
+      const sydneyTime = new Date(now.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
+      document.getElementById("time-sydney").textContent = `シドニー: ${sydneyTime.getHours()}:${String(sydneyTime.getMinutes()).padStart(2, "0")}`;
+    }
+
+    setInterval(updateWorldTime, 1000); // 毎秒更新
+    updateWorldTime(); // 初回即時実行
   </script>
 </body>
 </html>
