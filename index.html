@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>電子世界</title>
   <style>
+    /* 全体のスタイル */
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: #121212;
+      background: black;
       color: #fff;
       overflow: hidden;
     }
 
+    /* タイトル */
     h1 {
       text-align: center;
       margin-top: 20px;
@@ -21,6 +23,7 @@
       color: #00d4ff;
     }
 
+    /* 検索バーのスタイル */
     .search-container {
       display: flex;
       flex-direction: column;
@@ -39,6 +42,22 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
+    .search-container button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      background-color: #00d4ff;
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-container button:hover {
+      background-color: #008cba;
+    }
+
+    /* マウス追従の円 */
     #circle {
       position: fixed;
       top: 0;
@@ -57,33 +76,92 @@
       height: 30px;
       background: rgba(0, 212, 255, 0.8);
     }
+
+    /* 星空の背景 */
+    #stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(15, 15, 48, 1) 0%, rgba(0, 0, 0, 1) 80%);
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    #stars .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from {
+        opacity: 0.5;
+      }
+      to {
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
+  <div id="stars"></div>
   <h1>電子世界</h1>
   <div class="search-container">
-    <input type="text" placeholder="検索バー 1">
-    <input type="text" placeholder="検索バー 2">
+    <div>
+      <input id="search-bar-1" type="text" placeholder="検索バー 1">
+      <button onclick="search('search-bar-1')">検索</button>
+    </div>
+    <div>
+      <input id="search-bar-2" type="text" placeholder="検索バー 2">
+      <button onclick="search('search-bar-2')">検索</button>
+    </div>
   </div>
   <div id="circle"></div>
 
   <script>
     const circle = document.getElementById('circle');
+    const starsContainer = document.getElementById('stars');
 
+    // マウスの追従処理
     document.addEventListener('mousemove', (e) => {
-      // マウスの位置に円を移動
       circle.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
     });
 
     document.addEventListener('mousedown', () => {
-      // マウスクリック時のエフェクト
       circle.classList.add('small');
     });
 
     document.addEventListener('mouseup', () => {
-      // マウスを離したときに元に戻す
       circle.classList.remove('small');
     });
+
+    // 検索機能
+    function search(barId) {
+      const query = document.getElementById(barId).value;
+      if (query) {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+      } else {
+        alert('検索ワードを入力してください！');
+      }
+    }
+
+    // 星空の生成
+    function createStars() {
+      const starCount = 200; // 星の数
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        starsContainer.appendChild(star);
+      }
+    }
+
+    createStars();
   </script>
 </body>
 </html>
